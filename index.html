@@ -8,13 +8,11 @@
         :root {
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
-            --success-color: #10b981;
             --bg-color: #f3f4f6;
             --card-bg: #ffffff;
             --text-color: #1f2937;
             --border-color: #e5e7eb;
-            --hint-bg: #eff6ff;
-            --hint-border: #bfdbfe;
+            --accent-color: #10b981;
         }
 
         body {
@@ -47,6 +45,7 @@
             color: #6b7280;
             margin-bottom: 30px;
             font-size: 0.95rem;
+            font-style: italic;
         }
 
         .form-group {
@@ -58,21 +57,25 @@
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 0.95rem;
+            color: #374151;
         }
 
         input[type="text"],
-        textarea {
+        textarea,
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #fff;
         }
 
         input[type="text"]:focus,
-        textarea:focus {
+        textarea:focus,
+        select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -83,36 +86,27 @@
             min-height: 100px;
         }
 
-        .hint-box {
-            background-color: var(--hint-bg);
-            border-left: 4px solid var(--primary-color);
+        .filter-section {
+            background-color: #eff6ff;
             padding: 15px;
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px;
+            border: 1px solid #bfdbfe;
             margin-bottom: 20px;
-            font-size: 0.9rem;
         }
 
-        .hint-title {
-            font-weight: 700;
-            color: var(--primary-color);
+        .filter-label {
+            font-size: 0.9rem;
+            color: #1e40af;
             margin-bottom: 8px;
             display: block;
-        }
-
-        .hint-example {
-            font-style: italic;
-            color: #374151;
-            background: white;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px dashed var(--hint-border);
+            font-weight: 600;
         }
 
         .btn {
             display: inline-block;
             background-color: var(--primary-color);
             color: white;
-            padding: 14px 24px;
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
@@ -137,101 +131,95 @@
         }
 
         .results-section {
-            margin-top: 40px;
+            margin-top: 30px;
             display: none;
             border-top: 2px solid var(--border-color);
-            padding-top: 30px;
-        }
-
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
+            padding-top: 20px;
         }
 
         .level-group {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background: #f9fafb;
             padding: 20px;
             border-radius: 8px;
             border-left: 5px solid var(--primary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
         }
 
         .level-title {
             font-weight: 700;
             color: var(--primary-color);
-            margin-bottom: 15px;
             font-size: 1.2rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .level-badge {
-            background: var(--primary-color);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 8px;
+            border-radius: 4px;
             font-size: 0.8rem;
-            font-weight: normal;
+            font-weight: 600;
         }
 
         .objective-card {
             background: white;
-            padding: 15px;
+            border: 1px solid #e5e7eb;
             border-radius: 6px;
+            padding: 15px;
             margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .objective-card:last-child {
             margin-bottom: 0;
         }
 
-        .objective-text {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: #1f2937;
+        .objective-main {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 12px;
+            line-height: 1.5;
         }
 
-        .objective-components {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px dashed var(--border-color);
-            font-size: 0.85rem;
-            color: #6b7280;
+        .objective-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 8px;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 6px;
         }
 
-        .component-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-        }
-
-        .component-label {
-            font-weight: 600;
-            color: var(--primary-color);
-            flex-shrink: 0;
+        .detail-item strong {
+            color: #374151;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
         }
 
         .copy-notification {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: var(--success-color);
+            background-color: var(--accent-color);
             color: white;
-            padding: 14px 24px;
+            padding: 12px 24px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
@@ -246,13 +234,7 @@
             .container {
                 padding: 20px;
             }
-
-            .results-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .objective-components {
+            .objective-details {
                 grid-template-columns: 1fr;
             }
         }
@@ -263,24 +245,10 @@
 <div class="container">
     <h1>Генератор учебных целей</h1>
     <p class="subtitle">Обратное проектирование с фокусом на наблюдаемое поведение</p>
-
-    <div class="hint-box">
-        <span class="hint-title">💡 Формула цели:</span>
-        <div style="margin-bottom: 10px;">
-            "После обучения [роль] будет [конкретное действие] с использованием [инструмент] в ситуации [контекст],
-            что подтверждается [наблюдаемый маркер] в течение [временной период]"
-        </div>
-        <span class="hint-title">Пример правильной цели:</span>
-        <div class="hint-example">
-            "После обучения руководители будут использовать шаблон брифинга (цель – срок – критерии – ресурсы)
-            при каждой постановке задачи смежному отделу в письменной форме в течение 2 недель после тренинга,
-            что подтверждается записями в таск-трекере"
-        </div>
-    </div>
-
+    
     <div class="form-group">
         <label for="gapInput">Описание рабочего разрыва (GAP):</label>
-        <textarea id="gapInput" placeholder="Например: Руководители ставят задачи общими словами, не проговаривают ожидаемый результат, условия, срок и формат сдачи. Проверка понимания отсутствует. Должны ставить задачи по структуре: результат, условия, срок, проверка понимания, фиксация договоренности."></textarea>
+        <textarea id="gapInput" placeholder="Например: Руководители ставят задачи общими словами. Ожидается: четкая структура (результат, срок, критерии), проверка понимания и фиксация в трекере."></textarea>
     </div>
 
     <div class="form-group">
@@ -288,225 +256,207 @@
         <input type="text" id="audienceInput" placeholder="Например: Линейные руководители">
     </div>
 
+    <div class="filter-section">
+        <label class="filter-label" for="levelFilter">Показать цели только выбранного уровня:</label>
+        <select id="levelFilter">
+            <option value="all">Все уровни (по умолчанию)</option>
+            <option value="Знание">Знание</option>
+            <option value="Понимание">Понимание</option>
+            <option value="Применение">Применение</option>
+            <option value="Анализ">Анализ</option>
+            <option value="Синтез">Синтез</option>
+            <option value="Оценка">Оценка</option>
+        </select>
+    </div>
+
     <button class="btn" onclick="generateGoals()">Сгенерировать цели</button>
 
     <div id="resultsSection" class="results-section">
-        <div class="results-header">
-            <h2 style="font-size: 1.4rem; margin: 0;">Результат:</h2>
-            <button class="btn btn-secondary" style="width: auto; margin-top: 0;" onclick="copyResults()">📋 Скопировать результат</button>
-        </div>
+        <h2 style="font-size: 1.4rem; margin-bottom: 20px; color: #374151;">Результат:</h2>
         <div id="goalsContainer"></div>
+        <button class="btn btn-secondary" onclick="copyResults()">Скопировать результат</button>
     </div>
 </div>
 
-<div id="notification" class="copy-notification">✅ Результат скопирован в буфер обмена!</div>
+<div id="notification" class="copy-notification">Результат скопирован в буфер обмена!</div>
 
 <script>
-    // База данных для генерации целей с фокусом на наблюдаемое поведение
-    // Каждый уровень содержит шаблоны действий, инструментов, контекстов, маркеров и временных рамок
+    // База данных для генерации целей обратного проектирования
+    // Структура: action (действие), tool (инструмент), context (ситуация), marker (маркер), time (время)
     const bloomData = {
-        "Знание": {
-            description: "Воспроизведение информации и понимание терминологии",
-            templates: [
-                {
-                    action: "перечислять ключевые элементы структуры постановки задачи",
-                    tool: "чек-лист из 5 обязательных пунктов (результат, условия, срок, формат, проверка)",
-                    context: "перед началом любой рабочей коммуникации о делегировании",
-                    marker: "заполненным чек-листом в рабочей тетради или CRM-системе",
-                    time: "в течение 1 недели после тренинга при каждой попытке делегирования"
-                },
-                {
-                    action: "называть критерии качественно поставленной задачи",
-                    tool: "памятку с примерами корректных и некорректных формулировок",
-                    context: "при планировании задач на день или неделю",
-                    marker: "устным подтверждением критериев на планерке или в индивидуальной беседе",
-                    time: "ежедневно в течение 2 недель после обучения"
-                }
-            ]
-        },
-        "Понимание": {
-            description: "Объяснение смысла и причинно-следственных связей",
-            templates: [
-                {
-                    action: "объяснять сотруднику ожидаемый результат и последствия его недостижения",
-                    tool: "шаблон объяснения 'Что – Зачем – Что если'",
-                    context: "при постановке задачи, требующей понимания приоритета",
-                    marker: "аудиозаписью или стенограммой разговора, где присутствуют все три элемента",
-                    time: "при каждой постановке задачи в течение 3 недель"
-                },
-                {
-                    action: "интерпретировать реакцию сотрудника на задачу и корректировать объяснение",
-                    tool: "алгоритм проверки понимания через открытые вопросы",
-                    context: "после формулировки задачи до начала выполнения",
-                    marker: "зафиксированными ответами сотрудника в системе учета задач",
-                    time: "в течение 2 недель после тренинга при каждом делегировании"
-                }
-            ]
-        },
-        "Применение": {
-            description: "Использование знаний в конкретных рабочих ситуациях",
-            templates: [
-                {
-                    action: "формулировать задачу по полной структуре (результат, условия, срок, формат, проверка)",
-                    tool: "стандартизированный шаблон брифинга в письменном виде",
-                    context: "при постановке задачи любому сотруднику подразделения",
-                    marker: "заполненными шаблонами брифинга в корпоративном мессенджере или таск-трекере",
-                    time: "в течение 4 недель после обучения при 100% задач"
-                },
-                {
-                    action: "проводить проверку понимания задачи через вопросы сотруднику",
-                    tool: "скрипт из 3 контрольных вопросов ('Что сделаешь?', 'Когда?', 'Какие риски?')",
-                    context: "непосредственно после постановки задачи до ухода сотрудника",
-                    marker: "видео/аудиозаписью или свидетельством коллеги о проведении проверки",
-                    time: "при каждой постановке задачи в течение 3 недель"
-                }
-            ]
-        },
-        "Анализ": {
-            description: "Разбиение процесса на части и выявление причин проблем",
-            templates: [
-                {
-                    action: "анализировать причины невыполнения задачи через разбор ошибок в постановке",
-                    tool: "диагностическую матрицу 'Ошибка постановки – Последствие'",
-                    context: "при возникновении ситуации срыва срока или низкого качества результата",
-                    marker: "заполненной матрицей анализа с указанием конкретной ошибки в своем действии",
-                    time: "в течение 1 месяца после каждого случая проблем с выполнением задач"
-                },
-                {
-                    action: "различать ситуации, требующие детальной vs краткой постановки задачи",
-                    tool: "классификатор типов задач по уровню сложности и новизны для сотрудника",
-                    context: "на этапе планирования делегирования перед началом коммуникации",
-                    marker: "правильно выбранным форматом брифинга, подтвержденным руководителем или тренером",
-                    time: "в течение 1 месяца при планировании всех задач"
-                }
-            ]
-        },
-        "Синтез": {
-            description: "Создание новых подходов и адаптация инструментов под контекст",
-            templates: [
-                {
-                    action: "разрабатывать индивидуальный подход к постановке задачи для разных сотрудников",
-                    tool: "карту компетенций команды с рекомендациями по стилю коммуникации",
-                    context: "при долгосрочном планировании развития сотрудников и распределении задач",
-                    marker: "документированной картой с персональными подходами к минимум 3 сотрудникам",
-                    time: "в течение 2 недель после тренинга с обновлением ежемесячно"
-                },
-                {
-                    action: "создавать адаптированные шаблоны задач для повторяющихся процессов подразделения",
-                    tool: "библиотеку типовых задач с готовыми формулировками результатов и критериев",
-                    context: "при оптимизации регулярных процессов и онбординге новых сотрудников",
-                    marker: "созданной библиотекой из минимум 5 типовых задач в общем доступе команды",
-                    time: "в течение 1 месяца после обучения"
-                }
-            ]
-        },
-        "Оценка": {
-            description: "Вынесение суждений об эффективности и аргументация решений",
-            templates: [
-                {
-                    action: "оценивать эффективность собственной постановки задач по результатам выполнения",
-                    tool: "опросник обратной связи от сотрудников о ясности и полноте задачи",
-                    context: "после завершения значимых задач или проектов",
-                    marker: "собранными анкетами от минимум 3 сотрудников с анализом паттернов",
-                    time: "еженедельно в течение 1 месяца после тренинга"
-                },
-                {
-                    action: "аргументировать необходимость изменения сроков или условий задачи при рисках",
-                    tool: "формат эскалации рисков с обоснованием изменений",
-                    context: "при выявлении факторов, угрожающих выполнению задачи в исходных условиях",
-                    marker: "документированным уведомлением об изменении условий до наступления дедлайна",
-                    time: "при возникновении любых рисков в течение 2 месяцев после обучения"
-                }
-            ]
-        }
+        "Знание": [
+            {
+                action: "называть ключевые элементы структуры постановки задачи",
+                tool: "памятка '5 элементов задачи'",
+                context: "планерок и летучек",
+                marker: "устным перечислением всех 5 элементов без подсказок тренера",
+                time: "в первый день обучения"
+            },
+            {
+                action: "перечислять критерии качественной задачи",
+                tool: "чек-лист SMART-критериев",
+                context: "разбора кейсов из практики отдела",
+                marker: "правильной идентификацией ошибок в примерах задач",
+                time: "в ходе тестирования после модуля"
+            }
+        ],
+        "Понимание": [
+            {
+                action: "объяснять последствия нечеткой постановки задачи",
+                tool: "карту причинно-следственных связей",
+                context: "анализа реальных случаев срыва сроков в компании",
+                marker: "аргументированным описанием цепочки ошибок от формулировки до результата",
+                time: "в ходе групповой дискуссии"
+            },
+            {
+                action: "интерпретировать запросы сотрудников на уточнение",
+                tool: "алгоритм расшифровки неявных вопросов",
+                context: "симуляции диалога 'Руководитель-Подчиненный'",
+                marker: "верным определением недостающего элемента задачи (срок/критерий/ресурс)",
+                time: "во время ролевой игры"
+            }
+        ],
+        "Применение": [
+            {
+                action: "формулировать задачу по полной структуре",
+                tool: "шаблон брифинга (Цель – Срок – Критерии – Ресурсы)",
+                context: "постановки задачи смежному отделу или подчиненному",
+                marker: "заполненной картой задачи в CRM/трекере, соответствующей шаблону",
+                time: "в течение 2 недель после тренинга"
+            },
+            {
+                action: "проводить проверку понимания сотрудником",
+                tool: "скрипт вопросов на возврат информации ('Расскажи, как ты понял...')",
+                context: "любого оперативного взаимодействия при делегировании",
+                marker: "записью диалога или фиксацией факта проверки в листе наблюдения",
+                time: "при каждом взаимодействии в ближайший месяц"
+            }
+        ],
+        "Анализ": [
+            {
+                action: "выявлять отсутствующие элементы в поставленных задачах",
+                tool: "диагностическую матрицу 'Разрывы коммуникации'",
+                context: "аудита переписки в корпоративном мессенджере",
+                marker: "составленным отчетом с классификацией найденных ошибок по типам",
+                time: "к концу второй недели применения"
+            },
+            {
+                action: "различать задачи, требующие детального брифинга, от типовых",
+                tool: "критерии сложности и новизны задачи",
+                context: "планирования рабочей недели",
+                marker: "корректным распределением времени на постановку разных типов задач в плане",
+                time: "в течение месяца работы"
+            }
+        ],
+        "Синтез": [
+            {
+                action: "разрабатывать адаптивный алгоритм постановки задачи",
+                tool: "конструктор сценариев делегирования",
+                context: "подготовки к сложным проектам с новыми сотрудниками",
+                marker: "созданным индивидуальным планом ввода сотрудника в проект с этапами контроля",
+                time: "в рамках выполнения домашнего задания"
+            },
+            {
+                action: "создавать чек-листы самопроверки для своей команды",
+                tool: "шаблон стандарта операционной процедуры (СОП)",
+                context: "оптимизации рутинных процессов подразделения",
+                marker: "внедренным и подписанным командой документом стандарта",
+                time: "в течение 3 недель после обучения"
+            }
+        ],
+        "Оценка": [
+            {
+                action: "оценивать эффективность проведенного брифинга",
+                tool: "шкалу оценки качества постановки задачи (1-5 баллов)",
+                context: "ретроспективы завершенных задач",
+                marker: "заполненным журналом самооценки с анализом причин отклонений",
+                time: "еженедельно в течение квартала"
+            },
+            {
+                action: "аргументировать необходимость изменения условий задачи",
+                tool: "формуляр обоснования изменений",
+                context: "возникновения рисков срыва сроков или изменения приоритетов",
+                marker: "официально зафиксированным и согласованным изменением в таск-трекере",
+                time: "по мере возникновения изменений в рабочих процессах"
+            }
+        ]
     };
 
     function generateGoals() {
         const gapText = document.getElementById('gapInput').value.trim();
         const audience = document.getElementById('audienceInput').value.trim();
+        const selectedLevel = document.getElementById('levelFilter').value;
         const resultsSection = document.getElementById('resultsSection');
         const goalsContainer = document.getElementById('goalsContainer');
 
-        // Валидация
         if (!audience) {
-            alert("⚠️ Пожалуйста, укажите должность или роль участников.");
-            document.getElementById('audienceInput').focus();
+            alert("Пожалуйста, укажите должность или роль участников.");
             return;
         }
 
-        if (!gapText) {
-            alert("⚠️ Пожалуйста, опишите рабочий разрыв (GAP).");
-            document.getElementById('gapInput').focus();
-            return;
-        }
-
-        // Очистка предыдущих результатов
         goalsContainer.innerHTML = '';
 
-        // Генерация целей для каждого уровня
-        for (const [levelName, levelData] of Object.entries(bloomData)) {
+        const levelsToShow = selectedLevel === 'all' 
+            ? Object.keys(bloomData) 
+            : [selectedLevel];
+
+        let hasContent = false;
+
+        levelsToShow.forEach(levelName => {
+            const items = bloomData[levelName];
+            if (!items) return;
+
+            hasContent = true;
             const levelGroup = document.createElement('div');
             levelGroup.className = 'level-group';
 
             // Заголовок уровня
-            const title = document.createElement('div');
-            title.className = 'level-title';
-            title.innerHTML = `${levelName} <span class="level-badge">${levelData.description}</span>`;
-            levelGroup.appendChild(title);
+            const header = document.createElement('div');
+            header.className = 'level-header';
+            header.innerHTML = `
+                <span class="level-title">${levelName}</span>
+                <span class="level-badge">Уровень таксономии</span>
+            `;
+            levelGroup.appendChild(header);
 
-            // Генерация двух целей для уровня
-            levelData.templates.forEach((template, index) => {
-                const objectiveCard = document.createElement('div');
-                objectiveCard.className = 'objective-card';
+            // Генерация карточек целей
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'objective-card';
 
-                // Формирование полной цели по формуле
-                const goalText = `После обучения ${audience} будет ${template.action} с использованием "${template.tool}" в ситуации ${template.context}, что подтверждается ${template.marker} в течение ${template.time}.`;
+                // Формирование основной фразы с грамматически правильным согласованием
+                // "будут" вместо "будет", убираем дублирование "в течение"
+                const mainGoal = `После обучения ${audience} будут ${item.action} с использованием "${item.tool}" в ситуации ${item.context}, что подтверждается ${item.marker} ${item.time}.`;
 
-                const objectiveText = document.createElement('div');
-                objectiveText.className = 'objective-text';
-                objectiveText.textContent = goalText;
-                objectiveCard.appendChild(objectiveText);
+                const mainDiv = document.createElement('div');
+                mainDiv.className = 'objective-main';
+                mainDiv.textContent = mainGoal;
+                card.appendChild(mainDiv);
 
                 // Детализация компонентов для наглядности
-                const components = document.createElement('div');
-                components.className = 'objective-components';
-                components.innerHTML = `
-                    <div class="component-item">
-                        <span class="component-label">Действие:</span>
-                        <span>${template.action}</span>
-                    </div>
-                    <div class="component-item">
-                        <span class="component-label">Инструмент:</span>
-                        <span>${template.tool}</span>
-                    </div>
-                    <div class="component-item">
-                        <span class="component-label">Контекст:</span>
-                        <span>${template.context}</span>
-                    </div>
-                    <div class="component-item">
-                        <span class="component-label">Маркер:</span>
-                        <span>${template.marker}</span>
-                    </div>
-                    <div class="component-item">
-                        <span class="component-label">Срок:</span>
-                        <span>${template.time}</span>
-                    </div>
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'objective-details';
+                detailsDiv.innerHTML = `
+                    <div class="detail-item"><strong>Действие:</strong> ${item.action}</div>
+                    <div class="detail-item"><strong>Инструмент:</strong> ${item.tool}</div>
+                    <div class="detail-item"><strong>Контекст:</strong> ${item.context}</div>
+                    <div class="detail-item"><strong>Маркер:</strong> ${item.marker}</div>
+                    <div class="detail-item"><strong>Срок:</strong> ${item.time}</div>
                 `;
-                objectiveCard.appendChild(components);
+                card.appendChild(detailsDiv);
 
-                levelGroup.appendChild(objectiveCard);
+                levelGroup.appendChild(card);
             });
 
             goalsContainer.appendChild(levelGroup);
+        });
+
+        if (!hasContent) {
+            goalsContainer.innerHTML = '<p style="text-align:center; color:#6b7280;">Нет данных для отображения.</p>';
         }
 
-        // Показываем секцию результатов
         resultsSection.style.display = 'block';
-
-        // Плавный скролл к результатам
-        setTimeout(() => {
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
     }
 
     function copyResults() {
@@ -515,33 +465,22 @@
 
         const levels = goalsContainer.querySelectorAll('.level-group');
         levels.forEach(level => {
-            const titleElement = level.querySelector('.level-title');
-            const titleText = titleElement.childNodes[0].textContent.trim();
-            textToCopy += `=== ${titleText.toUpperCase()} ===\n\n`;
-
+            const title = level.querySelector('.level-title').textContent;
+            textToCopy += `=== ${title.toUpperCase()} ===\n\n`;
+            
             const cards = level.querySelectorAll('.objective-card');
-            cards.forEach((card, idx) => {
-                const objectiveText = card.querySelector('.objective-text').textContent;
-                textToCopy += `Цель ${idx + 1}: ${objectiveText}\n\n`;
+            cards.forEach((card, index) => {
+                const mainText = card.querySelector('.objective-main').textContent;
+                textToCopy += `${index + 1}. ${mainText}\n\n`;
             });
+            textToCopy += "--------------------------\n\n";
         });
 
         navigator.clipboard.writeText(textToCopy).then(() => {
             showNotification();
         }).catch(err => {
             console.error('Ошибка копирования: ', err);
-            // Fallback для старых браузеров
-            const textarea = document.createElement('textarea');
-            textarea.value = textToCopy;
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                showNotification();
-            } catch (e) {
-                alert("❌ Не удалось скопировать текст автоматически. Пожалуйста, выделите и скопируйте его вручную.");
-            }
-            document.body.removeChild(textarea);
+            alert("Не удалось скопировать текст автоматически. Пожалуйста, выделите и скопируйте его вручную.");
         });
     }
 
@@ -552,14 +491,6 @@
             notification.classList.remove('show');
         }, 3000);
     }
-
-    // Обработка нажатия Enter в полях ввода для быстрого запуска
-    document.getElementById('audienceInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            generateGoals();
-        }
-    });
 </script>
 
 </body>
