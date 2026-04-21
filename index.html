@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Умный Конструктор Учебных Целей</title>
+    <title>Интеллектуальный конструктор учебных целей (GAP Analysis)</title>
     <style>
         :root {
-            --primary: #2563eb;
+            --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
-            --success: #10b981;
-            --bg: #f3f4f6;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text: #1f2937;
-            --border: #e5e7eb;
-            --highlight: #eff6ff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --accent-light: #eff6ff;
         }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
             margin: 0;
             padding: 20px;
@@ -36,15 +37,16 @@
 
         h1 {
             text-align: center;
-            color: var(--primary);
+            color: var(--primary-color);
             margin-bottom: 10px;
+            font-size: 1.8rem;
         }
 
         .subtitle {
             text-align: center;
-            color: #6b7280;
+            color: #64748b;
             margin-bottom: 30px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .form-group {
@@ -55,24 +57,23 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #374151;
+            color: #334155;
         }
 
-        input[type="text"],
-        textarea,
-        select {
+        textarea, input[type="text"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
             transition: all 0.2s;
+            font-family: inherit;
         }
 
-        input:focus, textarea:focus, select:focus {
+        textarea:focus, input[type="text"]:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
@@ -83,7 +84,7 @@
 
         .btn {
             display: inline-block;
-            background-color: var(--primary);
+            background-color: var(--primary-color);
             color: white;
             padding: 12px 24px;
             border: none;
@@ -92,8 +93,8 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
+            transition: background-color 0.2s;
             text-align: center;
-            transition: background 0.2s;
         }
 
         .btn:hover {
@@ -101,131 +102,147 @@
         }
 
         .btn:disabled {
-            background-color: #9ca3af;
+            background-color: #cbd5e1;
             cursor: not-allowed;
         }
 
         .btn-secondary {
-            background-color: #4b5563;
-            margin-top: 20px;
+            background-color: #475569;
+            margin-top: 10px;
         }
+        .btn-secondary:hover { background-color: #334155; }
 
-        .btn-secondary:hover {
-            background-color: #374151;
-        }
-
-        /* Step 2: Action Selection Interface */
-        #selectionStep {
+        /* Step 2: Action Editor Styles */
+        #step2Section {
             display: none;
             margin-top: 30px;
-            border-top: 2px dashed var(--border);
+            border-top: 2px dashed var(--border-color);
             padding-top: 20px;
-            animation: fadeIn 0.5s;
+            animation: fadeIn 0.5s ease;
         }
 
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
+        .action-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
         }
 
-        .action-card {
-            background: var(--highlight);
-            border: 1px solid #bfdbfe;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.2s;
+        .action-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            background: var(--accent-light);
+            border: 1px solid #bfdbfe;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: transform 0.2s;
         }
 
-        .action-card.selected {
-            background: #dbeafe;
-            border-color: var(--primary);
-            font-weight: 600;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        .action-item:hover {
+            transform: translateX(5px);
         }
 
-        .action-card:hover {
-            transform: translateY(-2px);
+        .action-item input[type="checkbox"] {
+            margin-right: 15px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
 
-        .custom-action-input {
+        .action-item input[type="text"] {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            padding: 5px;
+            font-weight: 500;
+            color: #1e3a8a;
+        }
+        
+        .action-item input[type="text"]:focus {
+            box-shadow: none;
+            border-bottom: 1px solid var(--primary-color);
+        }
+
+        .add-action-row {
             display: flex;
             gap: 10px;
             margin-top: 15px;
         }
 
-        /* Results Section */
+        .add-action-row input {
+            flex-grow: 1;
+        }
+
+        .add-action-row button {
+            width: auto;
+            padding: 0 20px;
+        }
+
+        /* Results Styles */
         #resultsSection {
             display: none;
             margin-top: 30px;
-            border-top: 2px solid var(--border);
+            border-top: 2px solid var(--border-color);
             padding-top: 20px;
         }
 
         .level-group {
             margin-bottom: 25px;
-            background: #f9fafb;
+            background: #f8fafc;
             padding: 20px;
             border-radius: 8px;
-            border-left: 5px solid var(--primary);
+            border-left: 5px solid var(--primary-color);
         }
 
         .level-title {
             font-weight: 700;
-            color: var(--primary);
+            color: var(--primary-color);
+            font-size: 1.1rem;
             text-transform: uppercase;
             margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .objective-card {
             background: white;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        .objective-text {
+        .objective-main {
             font-size: 1.05rem;
-            color: #111827;
+            font-weight: 500;
+            color: #0f172a;
             margin-bottom: 12px;
             line-height: 1.5;
         }
 
-        .objective-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        .objective-tags {
+            display: flex;
+            flex-wrap: wrap;
             gap: 8px;
             font-size: 0.85rem;
-            background: #f3f4f6;
-            padding: 10px;
-            border-radius: 6px;
-            color: #4b5563;
         }
 
-        .meta-item strong {
-            display: block;
-            color: #374151;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            margin-bottom: 2px;
+        .tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
         }
+        .tag strong { color: #0f172a; }
 
         .notification {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: var(--success);
+            background-color: var(--success-color);
             color: white;
             padding: 12px 24px;
             border-radius: 8px;
@@ -235,433 +252,371 @@
             pointer-events: none;
             z-index: 1000;
         }
+        .notification.show { opacity: 1; }
 
-        .notification.show {
-            opacity: 1;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 600px) {
-            .custom-action-input {
-                flex-direction: column;
-            }
+        .helper-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 5px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Умный Конструктор Целей</h1>
-    <p class="subtitle">Генерация учебных целей на основе обратного проектирования поведения</p>
+    <h1>Конструктор учебных целей</h1>
+    <p class="subtitle">На основе GAP-анализа и наблюдаемого поведения</p>
 
-    <!-- Шаг 1: Ввод данных -->
-    <div id="inputStep">
+    <!-- STEP 1: INPUT -->
+    <div id="step1Section">
         <div class="form-group">
             <label for="gapInput">Описание рабочего разрыва (GAP):</label>
-            <textarea id="gapInput" placeholder="Опишите проблему подробно. Например: 'Менеджеры не выявляют истинные потребности клиента, сразу переходят к презентации продукта, игнорируют возражения и не фиксируют договоренности в CRM.'"></textarea>
+            <textarea id="gapInput" placeholder="Опишите ситуацию: что делают сейчас vs как должно быть.&#10;Пример: 'Отсутствие регулярных координационных встреч против наличия таких встреч с фиксированной структурой, повесткой и записью зависимостей.'"></textarea>
+            <div class="helper-text">Совет: Используйте конструкции «отсутствие X против наличия Y» для лучшего анализа.</div>
         </div>
 
         <div class="form-group">
             <label for="audienceInput">Должность / Роль участников:</label>
-            <input type="text" id="audienceInput" placeholder="Например: Менеджеры по продажам">
+            <input type="text" id="audienceInput" placeholder="Например: Руководители проектов, Менеджеры по продажам">
         </div>
 
-        <button class="btn" onclick="analyzeText()">Анализировать и выбрать действия</button>
+        <button class="btn" onclick="analyzeGap()">Анализировать и выделить действия</button>
     </div>
 
-    <!-- Шаг 2: Выбор действий -->
-    <div id="selectionStep">
-        <h3 style="margin-top:0;">Шаг 2: Подтвердите ключевые действия</h3>
-        <p style="color:#6b7280; font-size:0.9rem;">Мы выделили следующие действия из вашего описания. Отметьте галочками те, на которые нужно создать учебные цели, или добавьте свои.</p>
+    <!-- STEP 2: CONFIRM ACTIONS -->
+    <div id="step2Section">
+        <h2 style="font-size: 1.3rem; color: #334155;">Шаг 2: Подтверждение ключевых действий</h2>
+        <p class="helper-text" style="margin-bottom: 15px;">
+            Мы проанализировали ваш текст и выделили профессиональные действия. 
+            Отметьте галочками нужные пункты, отредактируйте формулировки при необходимости или добавьте свои.
+        </p>
         
-        <div id="actionsContainer" class="action-grid">
-            <!-- Чекбоксы будут здесь -->
+        <ul class="action-list" id="actionsList">
+            <!-- Items will be injected here -->
+        </ul>
+
+        <div class="add-action-row">
+            <input type="text" id="newActionInput" placeholder="Добавить свое действие (например: проводить еженедельный аудит)">
+            <button class="btn" style="width: auto;" onclick="addManualAction()">Добавить</button>
         </div>
 
-        <div class="custom-action-input">
-            <input type="text" id="customActionInput" placeholder="Добавить свое действие (например: вести переговоры)">
-            <button class="btn" style="width: auto;" onclick="addCustomAction()">Добавить</button>
-        </div>
-
-        <button class="btn" id="generateBtn" onclick="generateGoals()" disabled style="margin-top: 20px;">Сгенерировать цели</button>
-        <button class="btn btn-secondary" onclick="resetForm()" style="margin-top: 10px; background: transparent; color: #6b7280; border: 1px solid #d1d5db;">Начать заново</button>
+        <button class="btn" style="margin-top: 20px;" onclick="generateFinalGoals()">Сгенерировать учебные цели</button>
+        <button class="btn btn-secondary" onclick="resetToStep1()">Назад к началу</button>
     </div>
 
-    <!-- Шаг 3: Результаты -->
+    <!-- STEP 3: RESULTS -->
     <div id="resultsSection">
-        <h2 style="font-size: 1.4rem; margin-bottom: 20px;">Сгенерированные цели:</h2>
+        <h2 style="font-size: 1.4rem; color: #334155;">Результат: Учебные цели</h2>
         <div id="goalsContainer"></div>
         <button class="btn btn-secondary" onclick="copyResults()">Скопировать все цели</button>
+        <button class="btn btn-secondary" style="background-color: #64748b;" onclick="resetToStep1()">Новый анализ</button>
     </div>
 </div>
 
 <div id="notification" class="notification">Результат скопирован в буфер обмена!</div>
 
 <script>
-    // --- КОНФИГУРАЦИЯ И БАЗЫ ДАННЫХ ---
+    // --- CONFIGURATION & DICTIONARIES ---
 
-    // Стоп-слова для парсинга (исключаем из анализа)
-    const STOP_WORDS = new Set([
-        'быть', 'являться', 'казаться', 'становиться', 'иметь', 'мочь', 'хотеть', 'нужно', 'необходимо',
-        'что', 'где', 'когда', 'как', 'почему', 'если', 'то', 'и', 'или', 'но', 'а', 'в', 'на', 'с', 'к', 'по',
-        'для', 'без', 'из', 'этот', 'такой', 'весь', 'сам', 'тот', 'каждый', 'любой', 'другой', 'свой',
-        'не', 'ни', 'ли', 'же', 'бы', 'да', 'нет', 'процесс', 'новый', 'старый', 'хороший', 'плохой',
-        'должен', 'надо', 'важно', 'проблема', 'разрыв', 'gap', 'сотрудник', 'руководитель', 'клиент'
-    ]);
-
-    // Словарь соответствий: Ключевое слово -> Профессиональный инструмент/контекст
-    const CONTEXT_DB = {
-        'продаж': { tool: 'скрипт продаж', context: 'в ходе переговоров с клиентом' },
-        'продажа': { tool: 'алгоритм выявления потребностей', context: 'при презентации продукта' },
-        'возраж': { tool: 'матрица отработки возражений', context: 'при столкновении с отказом' },
-        'потребн': { tool: 'чек-лист вопросов SPIN', context: 'на этапе выяснения требований' },
-        'план': { tool: 'ежедневник / таск-трекер', context: 'при планировании рабочей недели' },
-        'задач': { tool: 'шаблон постановки задачи (SMART)', context: 'при делегировании полномочий' },
-        'отчет': { tool: 'стандартный шаблон отчета', context: 'по итогам рабочего дня' },
-        'коммуник': { tool: 'модель коммуникации', context: 'в переписке и устных диалогах' },
-        'обуч': { tool: 'план развития сотрудника (ИПР)', context: 'при проведении встречи 1-на-1' },
-        'анализ': { tool: 'диагностическая карта', context: 'при разборе инцидентов' },
-        'презент': { tool: 'структура питча', context: 'перед аудиторией или инвестором' },
-        'переговор': { tool: 'карта интересов сторон', context: 'в конфликтной ситуации' },
-        'код': { tool: 'стандарты кодирования (Code Style)', context: 'при написании программного кода' },
-        'ошиб': { tool: 'лист предотвращения ошибок (Poka-yoke)', context: 'при контроле качества' },
-        'сервис': { tool: 'стандарт обслуживания', context: 'при взаимодействии с посетителем' }
+    // Словарь соответствий: Ключевое слово -> Массив профессиональных действий
+    const METHOD_DICTIONARY = {
+        "координационн": ["проводить координационные встречи", "синхронизировать работу команды", "координировать действия участников"],
+        "встреч": ["проводить рабочие встречи", "организовывать совещания", "фасилитировать обсуждения"],
+        "структур": ["использовать фиксированную структуру", "следовать регламенту встречи", "применять стандартный шаблон"],
+        "повестк": ["формировать четкую повестку", "планировать темы обсуждения заранее", "распределять время по пунктам повестки"],
+        "зависимост": ["фиксировать зависимости между задачами", "документировать взаимосвязи процессов", "отслеживать критические пути"],
+        "подтвержден": ["получать явное подтверждение договоренностей", "фиксировать согласие участников", "согласовывать следующие шаги"],
+        "маркер": ["определять наблюдаемые маркеры результата", "фиксировать индикаторы выполнения", "контролировать видимые итоги"],
+        "протокол": ["вести протокол встречи", "документировать решения", "фиксировать итоги в письменном виде"],
+        "план": ["составлять план работ", "декомпозировать задачи", "распределять ресурсы по плану"],
+        "отчет": ["готовить статусные отчеты", "презентовать результаты работы", "анализировать отклонения от плана"],
+        "коммуникац": ["выстраивать эффективную коммуникацию", "информировать стейкхолдеров", "управлять ожиданиями"],
+        "ошибк": ["анализировать корневые причины ошибок", "предотвращать повторение инцидентов", "внедрять корректирующие действия"],
+        "продаж": ["выявлять потребности клиента", "отрабатывать возражения", "презентовать ценность продукта", "заключать сделки"],
+        "возражен": ["классифицировать возражения", "парировать сомнения аргументами", "использовать технику присоединения"],
+        "обратн": ["давать конструктивную обратную связь", "проводить оценку по модели SBI", "обсуждать зоны развития"]
     };
 
-    // Универсальные инструменты по типам глаголов
-    const VERB_TOOLS = {
-        'анализ': 'диагностический чек-лист',
-        'оцен': 'шкала критериев оценки',
-        'созд': 'проект решения / макет',
-        'разраб': 'техническое задание / алгоритм',
-        'пров': 'протокол проверки',
-        'фикс': 'реестр учета / журнал',
-        'default': 'стандартизированный алгоритм выполнения'
-    };
-
-    // Глаголы-маркеры для уровней Блума (инфинитивы)
-    const BLOOM_VERBS = {
-        'Знание': ['называть', 'перечислять', 'определять', 'цитировать'],
-        'Понимание': ['объяснять', 'интерпретировать', 'классифицировать', 'сравнивать'],
-        'Применение': ['применять', 'использовать', 'демонстрировать', 'выполнять'],
-        'Анализ': ['анализировать', 'различать', 'выявлять причины', 'структурировать'],
-        'Синтез': ['разрабатывать', 'создавать', 'формировать', 'предлагать решение'],
-        'Оценка': ['оценивать', 'аргументировать', 'защищать точку зрения', 'критиковать']
-    };
-
-    // Маркеры результата и сроки
-    const MARKERS = [
-        'заполненным рабочим листом',
-        'аудиозаписью взаимодействия',
-        'скриншотом выполненной задачи в системе',
-        'протоколом встречи',
-        'результатами теста',
-        'отчетом о проделанной работе',
-        'созданным проектом документа'
+    // Универсальные глаголы-усилители для существительных без явного действия
+    const ACTION_PREFIXES = [
+        "применять на практике", "использовать в работе", "внедрять в процесс", 
+        "соблюдать правила", "документировать", "анализировать", "контролировать"
     ];
 
-    const TIMELINES = [
-        'в течение 2 недель после обучения',
-        'при каждом рабочем взаимодействии в ближайший месяц',
-        'до конца текущего квартала',
-        'в рамках следующей аттестации',
-        'ежедневно в течение спринта'
-    ];
+    const BLOOM_LEVELS = ["Знание", "Понимание", "Применение", "Анализ", "Синтез", "Оценка"];
 
-    // --- СОСТОЯНИЕ ПРИЛОЖЕНИЯ ---
-    let selectedActions = [];
-    let extractedObject = ""; // Существительное-объект из GAP
+    // Конфигурация инструментов и контекстов по типам действий
+    function getToolAndContext(actionText) {
+        const lower = actionText.toLowerCase();
+        
+        if (lower.includes("встреч") || lower.includes("совещан") || lower.includes("переговор")) {
+            return { tool: "шаблон повестки и протокола встречи", context: "плановых и оперативных совещаний" };
+        }
+        if (lower.includes("план") || lower.includes("задач")) {
+            return { tool: "диаграмма Ганта или доска задач (Kanban)", context: "ежедневного планирования и распределения ресурсов" };
+        }
+        if (lower.includes("отчет") || lower.includes("документ")) {
+            return { tool: "стандартизированный бланк отчета", context: "подготовки итоговой документации" };
+        }
+        if (lower.includes("возражен") || lower.includes("клиент") || lower.includes("продаж")) {
+            return { tool: "скрипт обработки возражений и карта аргументов", context: "работы с клиентами во время звонков или встреч" };
+        }
+        if (lower.includes("обратн") || lower.includes("оценк")) {
+            return { tool: "модель обратной связи (SBI/BOFF)", context: "индивидуальных встреч с сотрудником" };
+        }
+        if (lower.includes("зависимост") || lower.includes("рис")) {
+            return { tool: "реестр рисков и матрица зависимостей", context: "управления проектом на этапе инициации" };
+        }
+        
+        // Fallback универсальный
+        return { tool: "чек-лист стандарта выполнения операции", context: "типичных рабочих ситуаций" };
+    }
 
-    // --- ФУНКЦИИ ПАРСИНГА ---
+    // --- LOGIC: PARSING & ANALYSIS ---
 
-    function analyzeText() {
+    let extractedActions = [];
+
+    function analyzeGap() {
         const gapText = document.getElementById('gapInput').value.trim();
         const audience = document.getElementById('audienceInput').value.trim();
 
         if (!gapText || !audience) {
-            alert("Пожалуйста, заполните оба поля.");
+            alert("Пожалуйста, заполните оба поля: описание разрыва и роль участников.");
             return;
         }
 
-        // 1. Токенизация и очистка
-        const words = gapText.toLowerCase()
-            .replace(/[.,!?;:()"]/g, '')
-            .split(/\s+/)
-            .filter(w => w.length > 3 && !STOP_WORDS.has(w));
-
-        // 2. Выделение существительного-объекта (самое частое или ключевое)
-        // Простая эвристика: ищем слова, которые есть в базе контекстов, или самое длинное существительное
-        let bestObject = "";
-        let maxScore = 0;
-
-        words.forEach(word => {
-            // Проверка на вхождение в базу контекстов
-            for (let key in CONTEXT_DB) {
-                if (word.includes(key)) {
-                    bestObject = word;
-                    maxScore = 100; // Приоритет известным темам
-                    break;
-                }
-            }
-            // Если не нашли в базе, берем самое "значимое" длинное слово (упрощенно)
-            if (maxScore === 0 && word.length > 5 && !/\d/.test(word)) {
-                bestObject = word;
-            }
-        });
-
-        extractedObject = bestObject || "рабочую задачу"; // Fallback
-
-        // 3. Выделение глаголов (действий)
-        // В русском языке в тексте могут быть инфинитивы (-ть, -ти) или формы настоящего времени.
-        // Для простоты ищем корни действий или слова, оканчивающиеся на типичные глагольные суффиксы.
-        // В реальном NLP нужен морфологический анализатор, здесь используем эвристику по базе CONTEXT_DB и окончанию.
+        // 1. Предобработка текста
+        const lowerText = gapText.toLowerCase();
         
-        const potentialVerbs = new Set();
+        // 2. Поиск по словарю методологических терминов
+        const foundActions = new Set();
         
-        // Добавляем действия, связанные с найденной темой из базы
-        if (bestObject) {
-            for (let key in CONTEXT_DB) {
-                if (bestObject.includes(key)) {
-                    // Генерируем гипотетические действия для этой темы
-                    if (key.includes('продаж')) potentialVerbs.add('проводить презентацию');
-                    if (key.includes('возраж')) potentialVerbs.add('отрабатывать возражения');
-                    if (key.includes('потребн')) potentialVerbs.add('выявлять потребности');
-                    if (key.includes('план')) potentialVerbs.add('составлять план');
-                    if (key.includes('задач')) potentialVerbs.add('ставить задачи');
-                    if (key.includes('отчет')) potentialVerbs.add('готовить отчет');
-                    if (key.includes('код')) potentialVerbs.add('писать код');
-                    if (key.includes('сервис')) potentialVerbs.add('оказывать сервис');
-                }
+        for (const [key, actions] of Object.entries(METHOD_DICTIONARY)) {
+            if (lowerText.includes(key)) {
+                // Добавляем первые 2 варианта из словаря, чтобы не перегружать
+                actions.slice(0, 2).forEach(act => foundActions.add(act));
             }
         }
 
-        // Парсим текст на наличие глаголов (окончания -ть, -ти, -ешь, -ет, -ем, -ут)
-        words.forEach(word => {
-            if (/(ть|ти|ешь|ет|ем|ут|ют|ил|ал)$/.test(word)) {
-                // Очищаем от частиц и местоимений
-                let cleanWord = word.replace(/(ся|сь)$/, ''); 
-                if (cleanWord.length > 4) {
-                    potentialVerbs.add(cleanWord);
+        // 3. Если найдено мало действий (< 3), пытаемся экстраполировать из существительных
+        if (foundActions.size < 3) {
+            // Простая эвристика: ищем длинные существительные (> 5 букв) и добавляем префикс
+            const words = lowerText.match(/\b[a-zа-яё]{6,}\b/gi) || [];
+            const stopWords = ["отсутствие", "наличие", "против", "должны", "будут", "который", "чтобы", "ситуация", "процесс"];
+            
+            words.forEach(word => {
+                if (!stopWords.includes(word) && !Array.from(foundActions).some(a => a.includes(word))) {
+                    const randomPrefix = ACTION_PREFIXES[Math.floor(Math.random() * ACTION_PREFIXES.length)];
+                    // Пробуем составить фразу
+                    const newAction = `${randomPrefix} ${word}`;
+                    foundActions.add(newAction);
                 }
-            }
-        });
-
-        // Если глаголов мало, добавляем универсальные действия, привязанные к объекту
-        if (potentialVerbs.size === 0) {
-            potentialVerbs.add(`работать с ${extractedObject}`);
-            potentialVerbs.add(`анализировать ${extractedObject}`);
-            potentialVerbs.add(`контролировать ${extractedObject}`);
+            });
         }
 
-        // Рендеринг шага 2
-        renderActionSelection(Array.from(potentialVerbs));
-        
-        document.getElementById('inputStep').style.display = 'none';
-        document.getElementById('selectionStep').style.display = 'block';
-    }
-
-    function renderActionSelection(actions) {
-        const container = document.getElementById('actionsContainer');
-        container.innerHTML = '';
-
-        actions.forEach((action, index) => {
-            const card = document.createElement('div');
-            card.className = 'action-card';
-            card.onclick = () => toggleAction(card, action);
-            
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.checked = true; // По умолчанию все выбраны
-            checkbox.style.pointerEvents = 'none'; // Клик по карточке управляет состоянием
-            
-            const span = document.createElement('span');
-            span.textContent = action;
-
-            card.appendChild(checkbox);
-            card.appendChild(span);
-            container.appendChild(card);
-            
-            // Инициализация состояния
-            selectedActions.push(action);
-        });
-    }
-
-    function toggleAction(cardElement, actionText) {
-        const isChecked = cardElement.classList.contains('selected');
-        
-        if (isChecked) {
-            cardElement.classList.remove('selected');
-            cardElement.querySelector('input').checked = false;
-            selectedActions = selectedActions.filter(a => a !== actionText);
-        } else {
-            cardElement.classList.add('selected');
-            cardElement.querySelector('input').checked = true;
-            selectedActions.push(actionText);
+        // 4. Гарантированный минимум (если совсем ничего не нашлось)
+        if (foundActions.size === 0) {
+            foundActions.add("выполнять описанные процессы согласно стандарту");
+            foundActions.add("фиксировать результаты работы в установленной форме");
+            foundActions.add("анализировать отклонения от нормы");
         }
 
-        updateGenerateButton();
-    }
+        // Преобразуем Set в массив объектов для редактирования
+        extractedActions = Array.from(foundActions).slice(0, 6).map((text, index) => ({
+            id: index,
+            text: text,
+            checked: true
+        }));
 
-    function addCustomAction() {
-        const input = document.getElementById('customActionInput');
-        const text = input.value.trim();
-        if (!text) return;
-
-        const container = document.getElementById('actionsContainer');
-        const card = document.createElement('div');
-        card.className = 'action-card selected';
-        card.onclick = () => toggleAction(card, text);
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = true;
-        checkbox.style.pointerEvents = 'none';
-
-        const span = document.createElement('span');
-        span.textContent = text;
-
-        card.appendChild(checkbox);
-        card.appendChild(span);
-        container.appendChild(card);
-
-        selectedActions.push(text);
-        input.value = '';
-        updateGenerateButton();
-    }
-
-    function updateGenerateButton() {
-        const btn = document.getElementById('generateBtn');
-        btn.disabled = selectedActions.length === 0;
-    }
-
-    function resetForm() {
-        document.getElementById('inputStep').style.display = 'block';
-        document.getElementById('selectionStep').style.display = 'none';
+        renderActionEditor();
+        
+        // Переключение видимости
+        document.getElementById('step1Section').style.display = 'none';
+        document.getElementById('step2Section').style.display = 'block';
         document.getElementById('resultsSection').style.display = 'none';
-        document.getElementById('gapInput').value = '';
-        document.getElementById('audienceInput').value = '';
-        selectedActions = [];
-        document.getElementById('actionsContainer').innerHTML = '';
     }
 
-    // --- ГЕНЕРАЦИЯ ЦЕЛЕЙ ---
+    function renderActionEditor() {
+        const list = document.getElementById('actionsList');
+        list.innerHTML = '';
 
-    function getToolAndContext(actionPhrase) {
-        // Пытаемся найти соответствие в базе по ключевым словам действия
-        for (let key in CONTEXT_DB) {
-            if (actionPhrase.includes(key)) {
-                return CONTEXT_DB[key];
-            }
-        }
-
-        // Если не нашли, определяем тип действия по первому слову (глаголу)
-        const firstWord = actionPhrase.split(' ')[0];
-        let toolBase = VERB_TOOLS['default'];
-
-        for (let verbKey in VERB_TOOLS) {
-            if (firstWord.includes(verbKey)) {
-                toolBase = VERB_TOOLS[verbKey];
-                break;
-            }
-        }
-
-        // Формируем универсальный инструмент на основе объекта
-        return {
-            tool: `${toolBase} для "${actionPhrase}"`,
-            context: `в стандартной рабочей ситуации при выполнении операции "${actionPhrase}"`
-        };
+        extractedActions.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = 'action-item';
+            li.innerHTML = `
+                <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleAction(${index}, this.checked)">
+                <input type="text" value="${item.text}" onchange="updateActionText(${index}, this.value)">
+            `;
+            list.appendChild(li);
+        });
     }
 
-    function generateGoals() {
+    function toggleAction(index, isChecked) {
+        extractedActions[index].checked = isChecked;
+    }
+
+    function updateActionText(index, newText) {
+        extractedActions[index].text = newText.trim();
+    }
+
+    function addManualAction() {
+        const input = document.getElementById('newActionInput');
+        const text = input.value.trim();
+        if (text) {
+            extractedActions.push({
+                id: Date.now(),
+                text: text,
+                checked: true
+            });
+            input.value = '';
+            renderActionEditor();
+        }
+    }
+
+    function resetToStep1() {
+        document.getElementById('step1Section').style.display = 'block';
+        document.getElementById('step2Section').style.display = 'none';
+        document.getElementById('resultsSection').style.display = 'none';
+    }
+
+    // --- LOGIC: GOAL GENERATION ---
+
+    function generateFinalGoals() {
         const audience = document.getElementById('audienceInput').value.trim();
+        const activeActions = extractedActions.filter(a => a.checked);
+
+        if (activeActions.length === 0) {
+            alert("Выберите хотя бы одно действие для генерации целей.");
+            return;
+        }
+
         const container = document.getElementById('goalsContainer');
         container.innerHTML = '';
 
-        if (selectedActions.length === 0) return;
-
-        // Проходим по всем уровням Блума
-        for (const [level, verbs] of Object.entries(BLOOM_VERBS)) {
+        // Для каждого уровня Блума генерируем цели на основе активных действий
+        // Чтобы не было слишком много, берем по 1-2 лучших действия на уровень или циклически
+        
+        BLOOM_LEVELS.forEach(level => {
             const levelGroup = document.createElement('div');
             levelGroup.className = 'level-group';
-
+            
             const title = document.createElement('div');
             title.className = 'level-title';
-            title.textContent = level;
+            title.innerHTML = `<span>${level}</span> <span style="font-size:0.8em; font-weight:normal; color:#64748b;">Таксономия</span>`;
             levelGroup.appendChild(title);
 
-            // Генерируем 2 цели на уровень, чередуя выбранные действия пользователя
-            // Если действий мало, повторяем их
-            for (let i = 0; i < 2; i++) {
-                const actionIndex = (i * Object.keys(BLOOM_VERBS).length + Object.keys(BLOOM_VERBS).indexOf(level)) % selectedActions.length;
-                const userAction = selectedActions[actionIndex];
-                
-                const bloomVerb = verbs[i % verbs.length];
-                const { tool, context } = getToolAndContext(userAction);
-                
-                const marker = MARKERS[Math.floor(Math.random() * MARKERS.length)];
-                const timeline = TIMELINES[Math.floor(Math.random() * TIMELINES.length)];
-
-                // ФОРМУЛА:
-                // После обучения [Роль] будут [Глагол Блума] [Действие пользователя + Объект] с использованием [Инструмент] в ситуации [Контекст], что подтверждается [Маркер] [Срок].
-                
-                // Корректировка фразы: если пользователь ввел "работать с Х", а глагол Блума "анализировать", 
-                // то фраза будет "анализировать процессы работы с Х". 
-                // Для простоты конкатенируем: [Глагол Блума] + [Действие пользователя]
-                
-                const fullActionPhrase = `${bloomVerb} аспекты операции: ${userAction}`;
-
-                const goalText = `После обучения ${audience} будут ${fullActionPhrase} с использованием "${tool}" в ситуации ${context}, что подтверждается ${marker} ${timeline}.`;
-
-                const card = document.createElement('div');
-                card.className = 'objective-card';
-
-                const textDiv = document.createElement('div');
-                textDiv.className = 'objective-text';
-                textDiv.textContent = goalText;
-                card.appendChild(textDiv);
-
-                const metaDiv = document.createElement('div');
-                metaDiv.className = 'objective-meta';
-                metaDiv.innerHTML = `
-                    <div class="meta-item"><strong>Действие</strong>${fullActionPhrase}</div>
-                    <div class="meta-item"><strong>Инструмент</strong>${tool}</div>
-                    <div class="meta-item"><strong>Контекст</strong>${context}</div>
-                    <div class="meta-item"><strong>Маркер</strong>${marker}</div>
-                    <div class="meta-item"><strong>Срок</strong>${timeline}</div>
-                `;
-                card.appendChild(metaDiv);
-
-                levelGroup.appendChild(card);
+            // Выбираем 2 действия для этого уровня (циклически или случайно, чтобы покрыть разные аспекты)
+            const actionsForLevel = [];
+            if (activeActions.length >= 2) {
+                // Берем два разных действия, если возможно
+                const offset = BLOOM_LEVELS.indexOf(level) % activeActions.length;
+                actionsForLevel.push(activeActions[offset]);
+                actionsForLevel.push(activeActions[(offset + 1) % activeActions.length]);
+            } else {
+                actionsForLevel.push(activeActions[0]);
             }
 
-            container.appendChild(levelGroup);
-        }
+            actionsForLevel.forEach(actionObj => {
+                const goalData = constructGoalSentence(audience, actionObj.text, level);
+                
+                const card = document.createElement('div');
+                card.className = 'objective-card';
+                
+                const mainText = document.createElement('div');
+                mainText.className = 'objective-main';
+                mainText.textContent = goalData.fullText;
+                card.appendChild(mainText);
 
-        document.getElementById('selectionStep').style.display = 'none';
+                const tags = document.createElement('div');
+                tags.className = 'objective-tags';
+                tags.innerHTML = `
+                    <span class="tag"><strong>Действие:</strong> ${actionObj.text}</span>
+                    <span class="tag"><strong>Инструмент:</strong> ${goalData.tool}</span>
+                    <span class="tag"><strong>Маркер:</strong> ${goalData.marker}</span>
+                    <span class="tag"><strong>Срок:</strong> ${goalData.time}</span>
+                `;
+                card.appendChild(tags);
+                
+                levelGroup.appendChild(card);
+            });
+
+            container.appendChild(levelGroup);
+        });
+
+        document.getElementById('step2Section').style.display = 'none';
         document.getElementById('resultsSection').style.display = 'block';
         document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
     }
 
+    function constructGoalSentence(role, actionText, bloomLevel) {
+        const { tool, context } = getToolAndContext(actionText);
+        
+        // Динамическая подстройка маркера и времени в зависимости от уровня Блума
+        let marker, time;
+        
+        switch(bloomLevel) {
+            case "Знание":
+                marker = "устным перечислением ключевых пунктов без подсказок";
+                time = "в ходе входного тестирования";
+                break;
+            case "Понимание":
+                marker = "правильным объяснением логики процесса на примерах";
+                time = "во время разбора кейсов";
+                break;
+            case "Применение":
+                marker = "демонстрацией навыка в ролевой игре или реальной задаче";
+                time = "в течение 1 недели после обучения";
+                break;
+            case "Анализ":
+                marker = "выявлением ошибок в типовых ситуациях и предложением решений";
+                time = "при аудите рабочих процессов";
+                break;
+            case "Синтез":
+                marker = "разработкой собственного плана или адаптацией инструмента под задачу";
+                time = "в рамках проектного задания";
+                break;
+            case "Оценка":
+                marker = "аргументированным решением о эффективности примененного метода";
+                time = "на ретроспективе по итогам месяца";
+                break;
+            default:
+                marker = "результатом выполнения действия";
+                time = "в течение 2 недель";
+        }
+
+        // Формирование финальной фразы
+        // "После обучения [Роль] будут [Действие] с использованием [Инструмент] в ситуации [Контекст], что подтверждается [Маркер] в течение [Срок]."
+        
+        const fullText = `После обучения ${role} будут ${actionText} с использованием "${tool}" в ситуации ${context}, что подтверждается ${marker} ${time}.`;
+
+        return { fullText, tool, marker, time };
+    }
+
     function copyResults() {
         const container = document.getElementById('goalsContainer');
-        let text = "";
+        let textToCopy = "";
 
-        container.querySelectorAll('.level-group').forEach(group => {
-            const level = group.querySelector('.level-title').textContent;
-            text += `=== ${level} ===\n`;
-            group.querySelectorAll('.objective-text').forEach(obj => {
-                text += `- ${obj.textContent}\n\n`;
+        const levels = container.querySelectorAll('.level-group');
+        levels.forEach(level => {
+            const title = level.querySelector('.level-title span:first-child').textContent;
+            textToCopy += `=== ${title.toUpperCase()} ===\n\n`;
+            
+            const cards = level.querySelectorAll('.objective-card');
+            cards.forEach((card, idx) => {
+                const text = card.querySelector('.objective-main').textContent;
+                textToCopy += `${idx + 1}. ${text}\n\n`;
             });
         });
 
-        navigator.clipboard.writeText(text).then(() => {
+        navigator.clipboard.writeText(textToCopy).then(() => {
             const notif = document.getElementById('notification');
             notif.classList.add('show');
             setTimeout(() => notif.classList.remove('show'), 3000);
+        }).catch(err => {
+            alert("Ошибка копирования. Попробуйте выделить текст вручную.");
         });
     }
 </script>
