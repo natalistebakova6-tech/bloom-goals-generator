@@ -237,7 +237,6 @@
         }
         
         function generateGoalText(gap, role) {
-            // Исправлено: "будет" → "будут", убраны повторы "в течение в течение"
             return {
                 knowledge: [
                     `После обучения ${role} будут перечислять ключевые элементы структуры постановки задачи с использованием чек-листа из 5 обязательных пунктов (результат, условия, срок, формат, проверка) в ситуации перед началом любой рабочей коммуникации о делегировании, что подтверждается заполненным чек-листом в рабочей тетради или CRM-системе в течение 1 недели после тренинга при каждой попытке делегирования.`,
@@ -305,7 +304,6 @@
                     html += `<div class="goal">`;
                     html += `<div class="goal-text"><strong>Цель ${index + 1}:</strong> ${goal}</div>`;
                     
-                    // Разбиваем цель на компоненты для наглядности
                     const parts = parseGoalComponents(goal);
                     html += `<div class="goal-details">`;
                     html += `<div class="detail-item"><span class="detail-label">Действие:</span> ${parts.action}</div>`;
@@ -323,24 +321,62 @@
             contentDiv.innerHTML = html;
             resultDiv.style.display = 'block';
             
-            // Прокрутка к результату
             resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
         function parseGoalComponents(goalText) {
-            // Упрощенный парсер для разбора компонентов цели
-            const actionMatch = goalText.match(/будут ([\w\s]+)/);
-            const instrumentMatch = goalText.match(/с использованием ([\w\s]+)/);
-            const contextMatch = goalText.match(/в ситуации ([\w\s]+)/);
-            const markerMatch = goalText.match(/что подтверждается ([\w\s]+)/);
-            const timeframeMatch = goalText.match(/в течение ([\w\s]+)/);
+            let action = '';
+            let instrument = '';
+            let context = '';
+            let marker = '';
+            let timeframe = '';
+            
+            // Извлекаем действие (глагол после "будут")
+            const actionMatch = goalText.match(/будут\s+([\w\s]+?)\s+с использованием/);
+            if (actionMatch) {
+                action = actionMatch[1].trim();
+            }
+            
+            // Извлекаем инструмент (после "с использованием")
+            const instrumentMatch = goalText.match(/с использованием\s+(.+?)\s+в ситуации/);
+            if (instrumentMatch) {
+                instrument = instrumentMatch[1].trim();
+            }
+            
+            // Извлекаем контекст (после "в ситуации")
+            const contextMatch = goalText.match(/в ситуации\s+(.+?)\s*, что подтверждается/);
+            if (contextMatch) {
+                context = contextMatch[1].trim();
+            }
+            
+            // Извлекаем маркер (после "что подтверждается")
+            const markerMatch = goalText.match(/что подтверждается\s+(.+?)\s+в течение/);
+            if (markerMatch) {
+                marker = markerMatch[1].trim();
+            } else {
+                const markerMatch2 = goalText.match(/что подтверждается\s+(.+)\./);
+                if (markerMatch2) {
+                    marker = markerMatch2[1].trim();
+                }
+            }
+            
+            // Извлекаем срок (после "в течение")
+            const timeframeMatch = goalText.match(/в течение\s+(.+?)(?:\s+при|\s+после|\.$)/);
+            if (timeframeMatch) {
+                timeframe = timeframeMatch[1].trim();
+            } else {
+                const timeframeMatch2 = goalText.match(/в течение\s+(.+)\./);
+                if (timeframeMatch2) {
+                    timeframe = timeframeMatch2[1].trim();
+                }
+            }
             
             return {
-                action: actionMatch ? actionMatch[1] : 'Не определено',
-                instrument: instrumentMatch ? instrumentMatch[1] : 'Не определено',
-                context: contextMatch ? contextMatch[1] : 'Не определено',
-                marker: markerMatch ? markerMatch[1] : 'Не определено',
-                timeframe: timeframeMatch ? timeframeMatch[1] : 'Не определено'
+                action: action || 'Не определено',
+                instrument: instrument || 'Не определено',
+                context: context || 'Не определено',
+                marker: marker || 'Не определено',
+                timeframe: timeframe || 'Не определено'
             };
         }
         
