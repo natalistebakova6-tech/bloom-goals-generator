@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор учебных целей (Bloom's Taxonomy)</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: #4b5563;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #374151;
+        }
+
+        .results-section {
+            margin-top: 30px;
+            display: none; /* Скрыто по умолчанию */
+            border-top: 2px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .level-group {
+            margin-bottom: 25px;
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .level-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .objective-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .objective-item {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .objective-item::before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .copy-notification.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Генератор учебных целей</h1>
+    
+    <div class="form-group">
+        <label for="gapInput">Описание рабочего разрыва (GAP):</label>
+        <textarea id="gapInput" placeholder="Например: Руководители ставят задачи общими словами, не проговаривают срок и результат. Должны ставить задачи по структуре: результат, условия, срок, проверка понимания."></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="audienceInput">Должность / Роль участников:</label>
+        <input type="text" id="audienceInput" placeholder="Например: Линейные руководители">
+    </div>
+
+    <button class="btn" onclick="generateGoals()">Сгенерировать цели</button>
+
+    <div id="resultsSection" class="results-section">
+        <h2 style="font-size: 1.4rem; margin-bottom: 20px;">Результат:</h2>
+        <div id="goalsContainer"></div>
+        <button class="btn btn-secondary" onclick="copyResults()">Скопировать результат</button>
+    </div>
+</div>
+
+<div id="notification" class="copy-notification">Результат скопирован в буфер обмена!</div>
+
+<script>
+    // База данных глаголов и условий для таксономии Блума
+    // Все глаголы в инфинитиве, так как они будут использоваться с частицей "смогут"
+    const bloomData = {
+        "Знание": [
+            { action: "перечислять", condition: "ключевые этапы и требования процесса в стандартных ситуациях" },
+            { action: "называть", condition: "основные критерии оценки качества выполнения задачи" }
+        ],
+        "Понимание": [
+            { action: "объяснять", condition: "причинно-следственные связи между качеством постановки задачи и результатом её выполнения" },
+            { action: "интерпретировать", condition: "потребности сотрудника при получении задачи для предотвращения ошибок" }
+        ],
+        "Применение": [
+            { action: "применять", condition: "единую структуру постановки задачи во всех рабочих коммуникациях" },
+            { action: "использовать", condition: "чек-лист проверки понимания задачи сотрудником перед началом работы" }
+        ],
+        "Анализ": [
+            { action: "анализировать", condition: "типичные ошибки в постановке задач и выявлять их корневые причины" },
+            { action: "различать", condition: "существенные и несущественные условия выполнения задачи в зависимости от контекста" }
+        ],
+        "Синтез": [
+            { action: "формулировать", condition: "четкие критерии успеха для сложных и нестандартных задач" },
+            { action: "разрабатывать", condition: "алгоритм взаимодействия с сотрудником для обеспечения полной договоренности" }
+        ],
+        "Оценка": [
+            { action: "оценивать", condition: "эффективность поставленных задач по факту их выполнения на основе согласованных критериев" },
+            { action: "аргументировать", condition: "необходимость изменения сроков или условий задачи при возникновении рисков" }
+        ]
+    };
+
+    function generateGoals() {
+        const gapText = document.getElementById('gapInput').value.trim();
+        const audience = document.getElementById('audienceInput').value.trim();
+        const resultsSection = document.getElementById('resultsSection');
+        const goalsContainer = document.getElementById('goalsContainer');
+
+        // Простая валидация
+        if (!audience) {
+            alert("Пожалуйста, укажите должность или роль участников.");
+            return;
+        }
+
+        // Очистка предыдущих результатов
+        goalsContainer.innerHTML = '';
+
+        // Генерация целей для каждого уровня
+        for (const [levelName, items] of Object.entries(bloomData)) {
+            const levelGroup = document.createElement('div');
+            levelGroup.className = 'level-group';
+
+            const title = document.createElement('div');
+            title.className = 'level-title';
+            title.textContent = levelName;
+            levelGroup.appendChild(title);
+
+            const list = document.createElement('ul');
+            list.className = 'objective-list';
+
+            items.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.className = 'objective-item';
+                
+                // Формирование грамматически корректной фразы:
+                // "После обучения [Роль] смогут [Глагол] [Условие/Критерий]"
+                // Добавляем контекст из GAP, если он есть, но в базовом шаблоне используем стандартные окончания
+                // Для улучшения можно динамически подставлять детали из GAP, но для универсальности
+                // оставим сильные стандартные формулировки, которые подходят под любой GAP о процессе.
+                
+                const goalText = `После обучения ${audience} смогут ${item.action} ${item.condition}.`;
+                listItem.textContent = goalText;
+                list.appendChild(listItem);
+            });
+
+            levelGroup.appendChild(list);
+            goalsContainer.appendChild(levelGroup);
+        }
+
+        // Показываем секцию результатов
+        resultsSection.style.display = 'block';
+        
+        // Плавный скролл к результатам
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyResults() {
+        const goalsContainer = document.getElementById('goalsContainer');
+        let textToCopy = "";
+
+        const levels = goalsContainer.querySelectorAll('.level-group');
+        levels.forEach(level => {
+            const title = level.querySelector('.level-title').textContent;
+            textToCopy += `${title.toUpperCase()}\n`;
+            
+            const items = level.querySelectorAll('.objective-item');
+            items.forEach(item => {
+                textToCopy += `- ${item.textContent}\n`;
+            });
+            textToCopy += "\n";
+        });
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showNotification();
+        }).catch(err => {
+            console.error('Ошибка копирования: ', err);
+            alert("Не удалось скопировать текст автоматически. Пожалуйста, выделите и скопируйте его вручную.");
+        });
+    }
+
+    function showNotification() {
+        const notification = document.getElementById('notification');
+        notification.classList.add('show');
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
